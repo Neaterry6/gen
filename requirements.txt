@@ -4,3 +4,4 @@ transformers
 diffusers
 numpy
 Pillow
+accelerate
