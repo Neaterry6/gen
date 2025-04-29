@@ -1,0 +1,8 @@
+services:
+  - name: ai-image-gen-api
+    envVars:
+      - key: PORT
+        value: 5000
+    buildCommand: "pip install --upgrade pip && pip install -r requirements.txt"
+    startCommand: "python app.py"
+    type: web
