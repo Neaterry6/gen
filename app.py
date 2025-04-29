@@ -1,14 +1,15 @@
 import os
 from flask import Flask, request, jsonify
-from diffusers import StableDiffusionPipeline
+from diffusers import DiffusionPipeline
+import torch
 
 # Initialize Flask App
 app = Flask(__name__)
 
-# Load AI Model (Stable Diffusion)
-model_id = "CompVis/stable-diffusion-v1-4"
-pipe = StableDiffusionPipeline.from_pretrained(model_id)
-pipe.to("cpu")  # Running on CPU (Change to "cuda" for GPU)
+# Load AI Model (Optimized for Low Memory)
+model_id = "runwayml/stable-diffusion-v1-5"
+pipe = DiffusionPipeline.from_pretrained(model_id, torch_dtype=torch.float16)
+pipe.to("cpu")  # Running on CPU (Change to "cuda" for GPU acceleration)
 
 @app.route("/generate-image", methods=["POST"])
 def generate_image():
@@ -27,5 +28,5 @@ def generate_image():
     return jsonify({"image": image_path})
 
 if __name__ == "__main__":
-    PORT = int(os.getenv("PORT", 5000))  # Ensures Flask binds to Render/Vercel correctly
+    PORT = int(os.getenv("PORT", 5000))  # ✅ Ensures Render binds to the correct port
     app.run(host="0.0.0.0", port=PORT, debug=True)
