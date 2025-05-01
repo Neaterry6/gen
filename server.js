@@ -8,20 +8,16 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Generate image endpoint
+// Generate image endpoint (mocked)
 app.post('/generate', async (req, res) => {
   const { prompt } = req.body;
-
   if (!prompt) return res.status(400).json({ error: 'Prompt is required.' });
 
   try {
-    const response = await axios.post('http://127.0.0.1:7860/sdapi/v1/txt2img', {
-      prompt: prompt,
-      steps: 25
-    });
+    // Mock image URL based on prompt using Unsplash random image API
+    const imageUrl = `https://source.unsplash.com/800x600/?${encodeURIComponent(prompt)}`;
 
-    const imageBase64 = response.data.images[0];
-    res.json({ image: `data:image/png;base64,${imageBase64}` });
+    res.json({ image: imageUrl });
 
   } catch (error) {
     console.error(error);
@@ -31,4 +27,4 @@ app.post('/generate', async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
-})
+});
