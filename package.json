@@ -1,8 +1,8 @@
 {
-  "name": "image-gen-api",
+  "name": "raphael-api",
   "version": "1.0.0",
+  "description": "Simple image gen API using raphael.app",
   "main": "server.js",
-  "type": "module",
   "scripts": {
     "start": "node server.js"
   },
