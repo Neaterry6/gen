@@ -1,35 +1,29 @@
-import express from 'express';
-import axios from 'axios';
-import cors from 'cors';
-
+const express = require('express');
+const axios = require('axios');
+const cors = require('cors');
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static('public'));
 
-// Generate image endpoint
 app.post('/generate', async (req, res) => {
   const { prompt } = req.body;
-
-  if (!prompt) return res.status(400).json({ error: 'Prompt is required.' });
+  if (!prompt) return res.status(400).json({ error: 'Prompt is required' });
 
   try {
-    const response = await axios.post('http://127.0.0.1:7860/sdapi/v1/txt2img', {
-      prompt: prompt,
-      steps: 25
+    // Replace RAPHAEL_ENDPOINT with actual endpoint later
+    const response = await axios.post('https://raphael.app/api/generate', {
+      prompt: prompt
     });
 
-    const imageBase64 = response.data.images[0];
-    const imageDataUri = `data:image/png;base64,${imageBase64}`;
-    res.json({ image: imageDataUri });
-
+    res.json({ image: response.data.image_url });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Image generation failed.' });
+    console.error(error.message);
+    res.status(500).json({ error: 'Image generation failed' });
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+app.listen(process.env.PORT || 3000, () =>
+  console.log('API running on port 3000')
+);
